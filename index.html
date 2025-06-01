@@ -13,6 +13,26 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="css/style.css" media="all" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>数学公式示例</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>音频比较表格</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      audio {
+        width: 150px;
+      }
+    </style>
   </head>
 
   <body>
@@ -29,11 +49,19 @@
             <a class="link" href="https://sites.google.com/site/tomokitoda/">Tomoki Toda</a><sup>1</sup>
           </h3>
           <h3 style="margin-top: 0.75rem;"><sup>1</sup>Nagoya University, Japan
-          <h3 style="margin-top: 0.75rem;">Submitted to IEEE/ACM Transactions on Audio Speech and Language Processing
+          <h3 style="margin-top: 0.75rem;">Submitted to IEEE Transactions on Audio Speech and Language Processing
           </h3>
         </div>
+        
+        <p>This work is based on our previous confernece paper <a class="link" href="https://www.isca-archive.org/interspeech_2024/chen24x_interspeech.pdf">QHM-GAN</a>.</p>
 
         <div class="icon-container">
+          <!-- <div class="icon-box">
+            <a class="link" href="https://www.isca-archive.org/interspeech_2024/chen24x_interspeech.pdf">
+              <i class="fa-regular fa-file-lines"></i>
+              <span>QHM-GAN</span>
+            </a>
+          </div> -->
           <div class="icon-box">
             <a class="link" href="https://arxiv.org/abs/2411.06807"><i class="fa-regular fa-file-lines"></i>
               <p>arXiv</p>
@@ -62,22 +90,22 @@
             leading to the outperformance of our methods over other methods in terms of generation speed, synthesis quality, and modification flexibility.</p>
         </div>
 
-        <h2 class="sectitle">Method</h2>
+        <h2 class="sectitle">Method (QHM-GAN and QHARMA-GAN)</h2>
         <div id="method" class="section">
           <figure>
             <img src="generator_QHM-GAN.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
-            <figcaption>Structure of QHM-GAN generator. $k_n$ and $d_n$ are the kernel size and dilation of the corresponding convolution layer, respectively, 
-              while Tanh denotes the hyperbolic tangent function. If unlabeled, $d_n=1$ by default. Note that the configurations of all MRFs in the generator are the same.
+            <figcaption>Structure of QHM-GAN generator. \(k_n\) and \(d_n\) are the kernel size and dilation of the corresponding convolution layer, respectively, 
+              while Tanh denotes the hyperbolic tangent function. If unlabeled, \(d_n=1\) by default. Note that the configurations of all MRFs in the generator are the same.
             </figcaption>
           </figure>
           <figure>
             <img src="generator_QHARMA-GAN.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
-            <figcaption>Structure of QHARMA-GAN generator. $k_n$ is the kernel size of the corresponding convolution layer. 
+            <figcaption>Structure of QHARMA-GAN generator. \(k_n\) is the kernel size of the corresponding convolution layer. 
               If unlabeled, a default dilation of 1 is used. The configurations of MRFs are the same as those shown in QHM-GAN. 
               Note that the activation functions in the output layer can be adjusted according to the type of ARMA coefficients. 
-              For instance, when both $a^l_{j,p}$ and $b^l_{j,q}$ are real-valued, activations such as leaky ReLU or Tanh can be used. 
-              For complex-valued $a^l_{j,p}$ and $b^l_{j,q}$, each parameter is predicted using two separate Conv1D layers, 
-              with Tanh and leaky ReLU used to output the phase and magnitude, respectively, which are then combined to form complex $a^l_{j,p}$ and $b^l_{j,q}$.
+              For instance, when both \(a^l_{j,p}\) and \(b^l_{j,q}\) are real-valued, activations such as leaky ReLU or Tanh can be used. 
+              For complex-valued \(a^l_{j,p}\) and \(b^l_{j,q}\), each parameter is predicted using two separate Conv1D layers, 
+              with Tanh and leaky ReLU used to output the phase and magnitude, respectively, which are then combined to form complex \(a^l_{j,p}\) and \(b^l_{j,q}\).
             </figcaption>
           </figure>
         </div>
@@ -85,403 +113,695 @@
         <h2 class="sectitle">Audio samples</h2>
         <div id="samples" class="section">
 
-          <p>Audio samples from the speech reconstruction experiment with a limited training F0 range on the JVS corpus
-            [1]. The models are the same as those in Table III of the paper, and the reconstruction is conditioned
-            on the mel-spectrogram (and prior signals based on F0). Models with an asterisk (*) next to their names are
-            equipped with anti-aliased nonlinear operations [2].</p>
+          <p>Models in main experiments are trained by JVS corpus [1] and VCTK corpus [2]. 
+            The few-shot learning is based on a small version of LJspeech corpus [3]. The generalization ability is built on the Opensinger [4].
+          </p>
+
+          <p>The candidate models are: <br>
+              Conventional models:
+            <p>   1. WORLD [5]</p>
+            <p>   2. QHM [6]</p><br>
+
+          Neural models:
+            <p>   1. HiFi-GAN [7]</p>
+            <p>   2. Vocos [8]</p>
+            <p>   3. QHM-GAN [9]</p>
+            <p>   4. QHARMA-GAN</p>
+            <p>   5. QHARMA-GAN-small</p><br>
+            We first conduct a preliminary experiment in Table I to select the best neural models from baselines (HiFi-GAN and Vocos) 
+            and our proposed methods (QHM-GAN and QHARMA-GAN) to further do the more in-depth comparison.
+          </p>
 
           <div class="selects" style="margin: 1.2rem auto;">
             <label for="set_id">Evaluation subset</label>
             <div class="simple_select">
               <select required id="set_id" name="set_id">
-                <option value="set1" selected>I (Preliminary experiments in speech synthesis and $f_0$ modification)</option>
+                <option value="set1" selected>I (Preliminary experiment in speech synthesis and \(f_0\) modification)</option>
                 <option value="set2">II (Comparison in speech synthesis)</option>
                 <option value="set3">III (Comparison in speech modification)</option>
-                <option value="set3">IV (Comparison in speech modification few-shot learning)</option>
-                <option value="set3">V (Comparison in singing voice which is out of the distribution)</option>
+                <option value="set4">IV (Comparison in speech modification few-shot learning)</option>
+                <option value="set5">V (Comparison in singing voice which is out of the distribution)</option>
               </select>
             </div>
 
             <div class=" button">
-              <input type="button" value="Apply" onclick="clickBtn()">
+              <input type="button" value="Apply" onclick="renderTable()">
             </div>
           </div>
 
-          <script>
-            let utt_names = [
-              "jvs003_parallel100_VOICEACTRESS100_050.wav",
-              "jvs041_falset10_VOICEACTRESS100_005.wav",
-              "jvs010_parallel100_VOICEACTRESS100_077.wav",
-              "jvs065_whisper10_VOICEACTRESS100_003.wav",
-            ];
 
-            function clickBtn() {
-              var set_id = document.getElementById('set_id');
-              set_id.options[set_id.selectedIndex].selected = true;
-              const methods = [
-                "natural", "pwg", "pwg.sine", "pwg.har", "pwg*", "pwg*.sine", "pwg*.har", "hifigan", "hifigan.sine", "hifigan.har", "hifigan*", "hifigan*.sine", "hifigan*.har", "vocos", "vocos.sine", "vocos.har", "wavehax", "wavehax.sine", "wavehax.har"
-              ];
 
-              if (set_id.value === "set1") {
-                utt_names = [
-                  "003_parallel100_VOICEACTRESS100_050",
-                  "041_falset10_VOICEACTRESS100_005",
-                  "010_parallel100_VOICEACTRESS100_077",
-                  "065_whisper10_VOICEACTRESS100_003",
-                ];
-              } else if (set_id.value === "set2") {
-                utt_names = [
-                  "001_parallel100_VOICEACTRESS100_036",
-                  "044_parallel100_VOICEACTRESS100_071",
-                  "068_nonpara30_BASIC5000_0896",
-                  "078_nonpara30_BASIC5000_0638",
-                ];
-              } else {
-                utt_names = [
-                  "026_falset10_BASIC5000_1023",
-                  "068_falset10_TRAVEL1000_0146",
-                  "072_falset10_BASIC5000_1976",
-                  "090_falset10_BASIC5000_1413",
-                ];
+
+
+
+          <div id="audio-table-container"></div>
+
+          <!-- JavaScript -->
+          <!-- <script>
+            const sets = {
+              set1: {
+                utt_names: ["jvs010_093", "p271_047"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHM-GAN": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              },
+              set2: {
+                utt_names: ["jvs001_091", "jvs003_092", "p226_364", "p259_472"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set3: {
+                utt_names: ["jvs008_091", "p318_418"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 4,
+                  "QHM": 4,
+                  "QHARMA-GAN": 4,
+                  "QHARMA-GAN-small": 4
+                },
+                versionCount: 4
+              },
+              set4: {
+                utt_names: ["LJ005-0121", "LJ005-0282"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set5: {
+                utt_names: ["斑马，斑马(Chinese, male)", "残酷月光(Chinese, male)", "千千阙歌(Chinese, female)", "我们的爱(Cantonese female)"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
               }
+            };
 
-              for (let i = 0; i < utt_names.length; ++i) {
-                document.getElementById("utt_name_" + i).innerText = utt_names[i];
-              }
+            const scaleLabels = {
+              1: [""],
+              4: ["2^-1", "2^-0.5", "2^0.5", "2^1"],
+              5: ["2^-1", "2^-0.5", "2^0", "2^0.5", "2^1"]
+            };
 
-              for (const m of methods) {
-                for (let i = 0; i < utt_names.length; ++i) {
-                  document.getElementById(m + "_" + i).src = "samples/" + m + "/jvs" + utt_names[i] + ".wav";
+            function renderTable() {
+              const setId = document.getElementById("set_id").value;
+              const { utt_names, methodVersions, versionCount } = sets[setId];
+              const methods = Object.keys(methodVersions);
+              const scales = scaleLabels[versionCount];
+
+              const container = document.getElementById("audio-table-container");
+              container.innerHTML = "";
+              const table = document.createElement("table");
+
+              const thead = document.createElement("thead");
+              const headerRow = document.createElement("tr");
+              ["samples"].concat(versionCount > 1 ? ["Scale"] : []).concat(methods).forEach(text => {
+                const th = document.createElement("th");
+                th.innerText = text;
+                headerRow.appendChild(th);
+              });
+              thead.appendChild(headerRow);
+              table.appendChild(thead);
+
+              const tbody = document.createElement("tbody");
+
+              for (const utt of utt_names) {
+                for (let i = 0; i < versionCount; i++) {
+                  const tr = document.createElement("tr");
+
+                  if (i === 0) {
+                    const tdUtt = document.createElement("td");
+                    tdUtt.innerText = utt;
+                    tdUtt.rowSpan = versionCount;
+                    tr.appendChild(tdUtt);
+                  }
+
+                  if (versionCount > 1) {
+                    const tdScale = document.createElement("td");
+                    tdScale.innerText = scales[i] || "";
+                    tr.appendChild(tdScale);
+                  }
+
+                  for (const method of methods) {
+                    // set3 中 Ground Truth 合并单元格只出现一次
+                    if (setId === "set3" && method === "Ground Truth") {
+                      if (i === 0) {
+                        const td = document.createElement("td");
+                        td.rowSpan = versionCount;
+                        const audio = document.createElement("audio");
+                        audio.controls = true;
+                        audio.src = `samples/${method}/${utt}.wav`;
+                        td.appendChild(audio);
+                        tr.appendChild(td);
+                      }
+                      continue; // 其余行不再生成 td
+                    }
+
+                    const td = document.createElement("td");
+                    const count = methodVersions[method];
+
+                    if (count === 1 && (versionCount === 1 || (versionCount === 5 && i === 2))) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = `samples/${method}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    if (count > 1 && i < count) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = `samples/${method}_v${i + 1}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    tr.appendChild(td);
+                  }
+
+                  tbody.appendChild(tr);
                 }
               }
+
+              table.appendChild(tbody);
+              container.appendChild(table);
             }
+
+            renderTable();
+          </script> -->
+          <script>
+            const sets = {
+              set1: {
+                utt_names: ["jvs010_093", "p271_047"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHM-GAN": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              },
+              set2: {
+                utt_names: ["jvs001_091", "jvs003_092", "p226_364", "p259_472"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set3: {
+                utt_names: ["jvs008_091", "p318_418"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 4,
+                  "QHM": 4,
+                  "QHARMA-GAN": 4,
+                  "QHARMA-GAN-small": 4
+                },
+                versionCount: 4
+              },
+              set4: {
+                utt_names: ["LJ005-0121", "LJ005-0282"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set5: {
+                utt_names: ["斑马，斑马(Chinese, male)", "残酷月光(Chinese, male)", "千千阙歌(Chinese, female)", "我们的爱(Cantonese female)"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              }
+            };
+            
+            const audioPathMap = {
+              set1: {
+                "jvs010_093": {
+                  "Ground Truth": [
+                    "samples/1/GT/jvs010_VOICEACTRESS100_093.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/1/HIFIGAN/jvs010_VOICEACTRESS100_093_gen.wav"
+                  ],
+                  "Vocos": [
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ],
+                  "QHM-GAN": [
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ]
+                },
+                "p271_047": {
+                  "Ground Truth": [
+                    "samples/1/GT/p271_047.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/1/HIFIGAN/p271_047_gen.wav"
+                  ],
+                  "Vocos": [
+                    "samples/1/VOCOS/p271_047_gen_p-1.wav",
+                    "samples/1/VOCOS/p271_047_gen_p-0.5.wav",
+                    "samples/1/VOCOS/p271_047_gen.wav",
+                    "samples/1/VOCOS/p271_047_gen_p0.5.wav",
+                    "samples/1/VOCOS/p271_047_gen_p1.wav"
+                  ],
+                  "QHM-GAN": [
+                    "samples/1/QHM-GAN/p271_047_gen_p-1.wav",
+                    "samples/1/QHM-GAN/p271_047_gen_p-0.5.wav",
+                    "samples/1/QHM-GAN/p271_047_gen.wav",
+                    "samples/1/QHM-GAN/p271_047_gen_p0.5.wav",
+                    "samples/1/QHM-GAN/p271_047_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/1/QHARMA-GAN/p271_047_gen_p-1.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen_p-0.5.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen_p0.5.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen_p1.wav"
+                  ]
+                }
+              },
+              set2: {
+                "jvs001_091": {
+                  "Ground Truth": [
+                    "samples/2/GT/jvs001_VOICEACTRESS100_091.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/jvs001_VOICEACTRESS100_091_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/jvs001_VOICEACTRESS100_091_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/jvs001_VOICEACTRESS100_091_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/jvs001_VOICEACTRESS100_091_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/jvs001_VOICEACTRESS100_091_gen.wav"
+                  ]
+                },
+                "jvs003_092": {
+                  "Ground Truth": [
+                    "samples/2/GT/jvs003_VOICEACTRESS100_092.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/jvs003_VOICEACTRESS100_092_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/jvs003_VOICEACTRESS100_092_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/jvs003_VOICEACTRESS100_092_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/jvs003_VOICEACTRESS100_092_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/jvs003_VOICEACTRESS100_092_gen.wav"
+                  ]
+                },
+                "p226_364": {
+                  "Ground Truth": [
+                    "samples/2/GT/p226_364.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/p226_364_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/p226_364_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/p226_364_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/p226_364_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/p226_364_gen.wav"
+                  ]
+                },
+                "p259_472": {
+                  "Ground Truth": [
+                    "samples/2/GT/p259_472.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/p259_472_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/p259_472_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/p259_472_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/p259_472_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/p259_472_gen.wav"
+                  ]
+                }
+              },
+              set3: {
+                "jvs008_091": {
+                  "Ground Truth": [
+                    "samples/3/GT/jvs008_VOICEACTRESS100_091.wav"
+                  ],
+                  "WORLD": [
+                    "samples/3/WORLD/-1/jvs008_VOICEACTRESS100_091_f0.50.wav",
+                    "samples/3/WORLD/-0.5/jvs008_VOICEACTRESS100_091_f0.71.wav",
+                    "samples/3/WORLD/0.5/jvs008_VOICEACTRESS100_091_f1.41.wav",
+                    "samples/3/WORLD/1/jvs008_VOICEACTRESS100_091_f2.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/3/QHM/-1/jvs008_VOICEACTRESS100_091_QHM_p-1.wav",
+                    "samples/3/QHM/-0.5/jvs008_VOICEACTRESS100_091_QHM_p-0.5.wav",
+                    "samples/3/QHM/0.5/jvs008_VOICEACTRESS100_091_QHM_p0.5.wav",
+                    "samples/3/QHM/1/jvs008_VOICEACTRESS100_091_QHM_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/3/QHARMA-GAN/-1/jvs008_VOICEACTRESS100_091_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN/-0.5/jvs008_VOICEACTRESS100_091_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN/0.5/jvs008_VOICEACTRESS100_091_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN/1/jvs008_VOICEACTRESS100_091_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/3/QHARMA-GAN-small/-1/jvs008_VOICEACTRESS100_091_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN-small/-0.5/jvs008_VOICEACTRESS100_091_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN-small/0.5/jvs008_VOICEACTRESS100_091_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN-small/1/jvs008_VOICEACTRESS100_091_gen_p1.wav"
+                  ]
+                },
+                "p318_418": {
+                  "Ground Truth": [
+                    "samples/3/GT/p318_418.wav"
+                  ],
+                  "WORLD": [
+                    "samples/3/WORLD/-1/p318_418_f0.50.wav",
+                    "samples/3/WORLD/-0.5/p318_418_f0.71.wav",
+                    "samples/3/WORLD/0.5/p318_418_f1.41.wav",
+                    "samples/3/WORLD/1/p318_418_f2.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/3/QHM/-1/p318_418_QHM_p-1.wav",
+                    "samples/3/QHM/-0.5/p318_418_QHM_p-0.5.wav",
+                    "samples/3/QHM/0.5/p318_418_QHM_p0.5.wav",
+                    "samples/3/QHM/1/p318_418_QHM_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/3/QHARMA-GAN/-1/p318_418_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN/-0.5/p318_418_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN/0.5/p318_418_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN/1/p318_418_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/3/QHARMA-GAN-small/-1/p318_418_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN-small/-0.5/p318_418_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN-small/0.5/p318_418_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN-small/1/p318_418_gen_p1.wav"
+                  ]
+                }
+              },
+              set4: {
+                "LJ005-0121": {
+                  "Ground Truth": [
+                    "samples/4/GT/LJ005-0121.wav"
+                  ],
+                  "WORLD": [
+                    "samples/4/WORLD/LJ005-0121_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/4/QHM/LJ005-0121_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/4/HIFIGAN/LJ005-0121_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/4/QHARMA-GAN/LJ005-0121_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/4/QHARMA-GAN/LJ005-0121_gen.wav"
+                  ]
+                },
+                "LJ005-0282": {
+                  "Ground Truth": [
+                    "samples/4/GT/LJ005-0282.wav"
+                  ],
+                  "WORLD": [
+                    "samples/4/WORLD/LJ005-0282_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/4/QHM/LJ005-0282_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/4/HIFIGAN/LJ005-0282_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/4/QHARMA-GAN/LJ005-0282_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/4/QHARMA-GAN/LJ005-0282_gen.wav"
+                  ]
+                }
+              },
+              set5: {
+                "斑马，斑马(Chinese, male)": {
+                  "Ground Truth": [
+                    "samples/5/GT/斑马，斑马.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/斑马，斑马.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/斑马，斑马_-1.wav",
+                    "samples/5/VOCOS/斑马，斑马_-0.5.wav",
+                    "samples/5/VOCOS/斑马，斑马.wav",
+                    "samples/5/VOCOS/斑马，斑马_0.5.wav",
+                    "samples/5/VOCOS/斑马，斑马_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/斑马，斑马_-1.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马_-0.5.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马_0.5.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马_1.wav"
+                  ]
+                },
+                "残酷月光(Chinese, male)": {
+                  "Ground Truth": [
+                    "samples/5/GT/残酷月光.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/残酷月光.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/残酷月光_-1.wav",
+                    "samples/5/VOCOS/残酷月光_-0.5.wav",
+                    "samples/5/VOCOS/残酷月光.wav",
+                    "samples/5/VOCOS/残酷月光_0.5.wav",
+                    "samples/5/VOCOS/残酷月光_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/残酷月光_-1.wav",
+                    "samples/5/QHARMA-GAN/残酷月光_-0.5.wav",
+                    "samples/5/QHARMA-GAN/残酷月光.wav",
+                    "samples/5/QHARMA-GAN/残酷月光_0.5.wav",
+                    "samples/5/QHARMA-GAN/残酷月光_1.wav"
+                  ]
+                },
+                "千千阙歌(Chinese, female)": {
+                  "Ground Truth": [
+                    "samples/5/GT/千千阙歌.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/千千阙歌.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/千千阙歌_-1.wav",
+                    "samples/5/VOCOS/千千阙歌_-0.5.wav",
+                    "samples/5/VOCOS/千千阙歌.wav",
+                    "samples/5/VOCOS/千千阙歌_0.5.wav",
+                    "samples/5/VOCOS/千千阙歌_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/千千阙歌_-1.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌_-0.5.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌_0.5.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌_1.wav"
+                  ]
+                },
+                "我们的爱(Cantonese female)": {
+                  "Ground Truth": [
+                    "samples/5/GT/我们的爱.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/我们的爱.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/我们的爱_-1.wav",
+                    "samples/5/VOCOS/我们的爱_-0.5.wav",
+                    "samples/5/VOCOS/我们的爱.wav",
+                    "samples/5/VOCOS/我们的爱_0.5.wav",
+                    "samples/5/VOCOS/我们的爱_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/我们的爱_-1.wav",
+                    "samples/5/QHARMA-GAN/我们的爱_-0.5.wav",
+                    "samples/5/QHARMA-GAN/我们的爱.wav",
+                    "samples/5/QHARMA-GAN/我们的爱_0.5.wav",
+                    "samples/5/QHARMA-GAN/我们的爱_1.wav"
+                  ]
+                }
+              }
+            };
+
+            const scaleLabels = {
+              1: [""],
+              4: ["2^-1", "2^-0.5", "2^0.5", "2^1"],
+              5: ["2^-1", "2^-0.5", "2^0", "2^0.5", "2^1"]
+            };
+
+            function renderTable() {
+              const setId = document.getElementById("set_id").value;
+              const { utt_names, methodVersions, versionCount } = sets[setId];
+              const methods = Object.keys(methodVersions);
+              const scales = scaleLabels[versionCount];
+
+              const container = document.getElementById("audio-table-container");
+              container.innerHTML = "";
+              const table = document.createElement("table");
+
+              const thead = document.createElement("thead");
+              const headerRow = document.createElement("tr");
+              ["samples"].concat(versionCount > 1 ? ["Scale"] : []).concat(methods).forEach(text => {
+                const th = document.createElement("th");
+                th.innerText = text;
+                headerRow.appendChild(th);
+              });
+              thead.appendChild(headerRow);
+              table.appendChild(thead);
+
+              const tbody = document.createElement("tbody");
+
+              for (const utt of utt_names) {
+                for (let i = 0; i < versionCount; i++) {
+                  const tr = document.createElement("tr");
+
+                  if (i === 0) {
+                    const tdUtt = document.createElement("td");
+                    tdUtt.innerText = utt;
+                    tdUtt.rowSpan = versionCount;
+                    tr.appendChild(tdUtt);
+                  }
+
+                  if (versionCount > 1) {
+                    const tdScale = document.createElement("td");
+                    tdScale.innerText = scales[i] || "";
+                    tr.appendChild(tdScale);
+                  }
+
+                  for (const method of methods) {
+                    // set3 中 Ground Truth 合并单元格只出现一次
+                    if (setId === "set3" && method === "Ground Truth") {
+                      if (i === 0) {
+                        const td = document.createElement("td");
+                        td.rowSpan = versionCount;
+                        const audio = document.createElement("audio");
+                        audio.controls = true;
+                        audio.src = (audioPathMap?.[setId]?.[utt]?.[method]?.[0]) || `samples/${method}/${utt}.wav`;
+                        td.appendChild(audio);
+                        tr.appendChild(td);
+                      }
+                      continue; // 其余行不再生成 td
+                    }
+
+                    const td = document.createElement("td");
+                    const count = methodVersions[method];
+
+                    if (count === 1 && (versionCount === 1 || (versionCount === 5 && i === 2))) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = (audioPathMap?.[setId]?.[utt]?.[method]?.[0]) || `samples/${method}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    if (count > 1 && i < count) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = (audioPathMap?.[setId]?.[utt]?.[method]?.[i]) || `samples/${method}_v${i + 1}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    tr.appendChild(td);
+                  }
+
+                  tbody.appendChild(tr);
+                }
+              }
+
+              table.appendChild(tbody);
+              container.appendChild(table);
+            }
+
+            renderTable();
           </script>
 
-          <table class="audio_table">
-            <thead>
-              <tr>
-                <th style="text-align: center" class="td_fixed">Model</th>
-                <th style="text-align: center" id="utt_name_0">003_parallel100_VOICEACTRESS100_050</th>
-                <th style="text-align: center" id="utt_name_1">041_falset10_VOICEACTRESS100_005</th>
-                <th style="text-align: center" id="utt_name_2">010_parallel100_VOICEACTRESS100_077</th>
-                <th style="text-align: center" id="utt_name_3">065_whisper10_VOICEACTRESS100_003</th>
-              </tr>
-            </thead>
+          
 
-            <tbody>
 
-              <tr>
-                <td style="text-align: left" class="td_fixed">Natural</td>
-                <td style="text-align: center"><audio id="natural_0"
-                    src="samples/natural/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="natural_1"
-                    src="samples/natural/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="natural_2"
-                    src="samples/natural/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="natural_3"
-                    src="samples/natural/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
 
-              <tr>
-                <td style="text-align: left" class="td_fixed">PWG [3]<br>Noise prior</td>
-                <td style="text-align: center"><audio id="pwg_0"
-                    src="samples/pwg/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg_1"
-                    src="samples/pwg/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg_2"
-                    src="samples/pwg/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg_3"
-                    src="samples/pwg/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
 
-              <tr>
-                <td style="text-align: left" class="td_fixed">PWG<br>Sine prior</td>
-                <td style="text-align: center"><audio id="pwg.sine_0"
-                    src="samples/pwg.sine/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg.sine_1"
-                    src="samples/pwg.sine/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg.sine_2"
-                    src="samples/pwg.sine/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg.sine_3"
-                    src="samples/pwg.sine/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
 
-              <tr>
-                <td style="text-align: left" class="td_fixed">PWG<br>Harmonic prior</td>
-                <td style="text-align: center"><audio id="pwg.har_0"
-                    src="samples/pwg.har/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg.har_1"
-                    src="samples/pwg.har/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg.har_2"
-                    src="samples/pwg.har/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg.har_3"
-                    src="samples/pwg.har/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">PWG*<br>Noise prior</td>
-                <td style="text-align: center"><audio id="pwg*_0"
-                    src="samples/pwg*/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*_1"
-                    src="samples/pwg*/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*_2"
-                    src="samples/pwg*/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*_3"
-                    src="samples/pwg*/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">PWG*<br>Sine prior</td>
-                <td style="text-align: center"><audio id="pwg*.sine_0"
-                    src="samples/pwg*.sine/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*.sine_1"
-                    src="samples/pwg*.sine/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*.sine_2"
-                    src="samples/pwg*.sine/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*.sine_3"
-                    src="samples/pwg*.sine/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">PWG*<br>Harmonic prior</td>
-                <td style="text-align: center"><audio id="pwg*.har_0"
-                    src="samples/pwg*.har/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*.har_1"
-                    src="samples/pwg*.har/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*.har_2"
-                    src="samples/pwg*.har/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="pwg*.har_3"
-                    src="samples/pwg*.har/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">HiFi-GAN [4]</td>
-                <td style="text-align: center"><audio id="hifigan_0"
-                    src="samples/hifigan/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan_1"
-                    src="samples/hifigan/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan_2"
-                    src="samples/hifigan/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan_3"
-                    src="samples/hifigan/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">HiFi-GAN<br>Sine prior</td>
-                <td style="text-align: center"><audio id="hifigan.sine_0"
-                    src="samples/hifigan/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan.sine_1"
-                    src="samples/hifigan.sine/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan.sine_2"
-                    src="samples/hifigan.sine/jvs010_parallel100_VOICEACTRESS100_077.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan.sine_3"
-                    src="samples/hifigan.sine/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">HiFi-GAN<br>Harmonic prior</td>
-                <td style="text-align: center"><audio id="hifigan.har_0"
-                    src="samples/hifigan.har/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan.har_1"
-                    src="samples/hifigan.har/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan.har_2"
-                    src="samples/hifigan.har/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan.har_3"
-                    src="samples/hifigan.har/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">HiFi-GAN*</td>
-                <td style="text-align: center"><audio id="hifigan*_0"
-                    src="samples/hifigan*/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*_1"
-                    src="samples/hifigan*/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*_2"
-                    src="samples/hifigan*/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*_3"
-                    src="samples/hifigan*/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">HiFi-GAN*<br>Sine prior</td>
-                <td style="text-align: center"><audio id="hifigan*.sine_0"
-                    src="samples/hifigan*.sine/jvs003_parallel100_VOICEACTRESS100_050.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*.sine_1"
-                    src="samples/hifigan*.sine/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*.sine_2"
-                    src="samples/hifigan*.sine/jvs010_parallel100_VOICEACTRESS100_077.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*.sine_3"
-                    src="samples/hifigan*.sine/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">HiFi-GAN*<br>Harmonic prior</td>
-                <td style="text-align: center"><audio id="hifigan*.har_0"
-                    src="samples/hifigan*.har/jvs003_parallel100_VOICEACTRESS100_050.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*.har_1"
-                    src="samples/hifigan*.har/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*.har_2"
-                    src="samples/hifigan*.har/jvs010_parallel100_VOICEACTRESS100_077.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="hifigan*.har_3"
-                    src="samples/hifigan*.har/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">Vocos [5]</td>
-                <td style="text-align: center"><audio id="vocos_0"
-                    src="samples/vocos/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos_1"
-                    src="samples/vocos/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos_2"
-                    src="samples/vocos/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos_3"
-                    src="samples/vocos/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">Vocos<br>Sine prior</td>
-                <td style="text-align: center"><audio id="vocos.sine_0"
-                    src="samples/vocos.sine/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos.sine_1"
-                    src="samples/vocos.sine/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos.sine_2"
-                    src="samples/vocos.sine/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos.sine_3"
-                    src="samples/vocos.sine/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">Vocos<br>Harmonic prior</td>
-                <td style="text-align: center"><audio id="vocos.har_0"
-                    src="samples/vocos.har/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos.har_1"
-                    src="samples/vocos.har/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos.har_2"
-                    src="samples/vocos.har/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="vocos.har_3"
-                    src="samples/vocos.har/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">Wavehax<br>Noise prior</td>
-                <td style="text-align: center"><audio id="wavehax_0"
-                    src="samples/wavehax/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax_1"
-                    src="samples/wavehax/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax_2"
-                    src="samples/wavehax/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax_3"
-                    src="samples/wavehax/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">Wavehax<br>Sine prior</td>
-                <td style="text-align: center"><audio id="wavehax.sine_0"
-                    src="samples/wavehax.sine/jvs003_parallel100_VOICEACTRESS100_050.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax.sine_1"
-                    src="samples/wavehax.sine/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax.sine_2"
-                    src="samples/wavehax.sine/jvs010_parallel100_VOICEACTRESS100_077.wav" controls=""
-                    preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax.sine_3"
-                    src="samples/wavehax.sine/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-
-              <tr>
-                <td style="text-align: left" class="td_fixed">Wavehax<br>Harmonic prior</td>
-                <td style="text-align: center"><audio id="wavehax.har_0"
-                    src="samples/wavehax.har/jvs003_parallel100_VOICEACTRESS100_050.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax.har_1"
-                    src="samples/wavehax.har/jvs041_falset10_VOICEACTRESS100_005.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax.har_2"
-                    src="samples/wavehax.har/jvs010_parallel100_VOICEACTRESS100_077.wav" controls="" preload=""></audio>
-                </td>
-                <td style="text-align: center"><audio id="wavehax.har_3"
-                    src="samples/wavehax.har/jvs065_whisper10_VOICEACTRESS100_003.wav" controls="" preload=""></audio>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          
         </div>
 
         <h2 class="sectitle">Citation</h2>
@@ -494,19 +814,29 @@
         <h2 class="sectitle">References</h2>
         <div id="references" class="section">
           <ul>
-            <li>[1] S. Takamichi, K. Mitsui, Y. Saito, T. Koriyama, N. Tanji, and H. Saruwatari, JVS corpus: free
-              Japanese multi-speaker voice corpus, arXiv preprint, 1908.06248, Aug. 2019.</li>
-            <li>[2] S. gil Lee, W. Ping, B. Ginsburg, B. Catanzaro, S. Yoon, BigVGAN: A Universal
-              Neural Vocoder with Large-Scale Training, in Proc. ICLR, 2023.</li>
-            <li>[3] R. Yamamoto, E. Song, and J.-M. Kim, Parallel Wavegan: A Fast
-              Waveform Generation Model Based on Generative Adversarial
-              Networks with Multi-Resolution Spectrogram, in Proc. ICASSP,
-              2020, pp. 6199-6203.</li>
-            <li>[4] J. Kong, J. Kim, and J. Bae, HiFi-GAN: Generative Adversarial
-              Networks for Efficient and High Fidelity Speech Synthesis, in
-              Proc. NeurIPS, vol. 33, 2020, pp. 17022-17033.</li>
-            <li>[5] H. Siuzdak, Vocos: Closing the gap between time-domain and Fourierbased neural vocoders for
-              high-quality audio synthesis, in Proc. ICLR, 2024.</li>
+            <li>[1] S. Takamichi, K. Mitsui, Y. Saito, T. Koriyama, N. Tanji, and
+                    H. Saruwatari, “JVS corpus: free Japanese multi-speaker voice corpus,”
+                    arXiv preprint arXiv:1908.06248, 2019.</li>
+            <li>[2] J. Yamagishi, C. Veaux, K. MacDonald et al., “CSTR VCTK Corpus:
+                    English multi-speaker corpus for CSTR voice cloning toolkit (version
+                    0.92),” University of Edinburgh. The Centre for Speech Technology
+                    Research (CSTR), pp. 271-350, 2019.</li>
+            <li>[3] K. Ito and L. Johnson, “The LJ Speech dataset,” https://keithito.com/
+                    LJ-Speech-Dataset/, 2017.</li>
+            <li>[4] Huang, R., Chen, F., Ren, Y., Liu, J., Cui, C., and Zhao, Z. Multi-singer: Fast multi-singer 
+                    singing voice vocoder with a large-scale corpus. In Proceedings of the 29th ACM International Conference 
+                    on Multimedia, pp. 3945-3954, 2021.</li>
+            <li>[5] M.Morise, F. Yokomori, and K. Ozawa, “World: a vocoder-based high-quality speech synthesis system for real-time applications,” 
+                    IEICE TRANSACTIONS on Information and Systems, vol. 99, no. 7, pp. 1877-1884, 2016.</li>
+            <li>[6] Y. Pantazis, O. Rosec, and Y. Stylianou, “On the properties of a time
+                    varying quasi-harmonic model of speech,” in Proc. Interspeech, 2008.</li>
+            <li>[7] J. Kong, J. Kim, and J. Bae, “HiFi-GAN: Generative adversarial
+                    networks for efficient and high fidelity speech synthesis,” Advances
+                    in Neural Information Processing Systems, vol. 33, pp. 17022-17033,2020.</li>
+            <li>[8] H. Siuzdak, Vocos: Closing the gap between time-domain and Fourierbased neural vocoders for
+                    high-quality audio synthesis, in Proc. ICLR, 2024.</li>
+            <li>[9] S. Chen and T. Toda, “QHM-GAN: Neural vocoder based on quasi
+                    harmonic modeling,” in Proc. Interspeech, 2024, pp. 3889–3893.</li>
           </ul>
         </div>
 
@@ -516,16 +846,16 @@
         </div>
 
         <footer>
-          <a class="copyright">&copy; 2024 Reo Yoneyama</a>
-          <a href="https://github.com/chomeyama/" target="_blank">
+          <a class="copyright">&copy; 2025 Shaowen Chen</a>
+          <!-- <a href="https://ieeexplore.ieee.org/author/37089757663/" target="_blank">
             <i class="fa-brands fa-github"></i>
-          </a>
-          <a href="https://scholar.google.com/citations?hl=en&user=ihKGblgAAAAJ" target="_blank">
+          </a> -->
+          <!-- <a href="https://scholar.google.com/citations?hl=en&user=ihKGblgAAAAJ" target="_blank">
             <i class="fa-brands fa-google-scholar"></i>
-          </a>
-          <a href="https://twitter.com/ricepamo/" target="_blank">
+          </a> -->
+          <!-- <a href="https://twitter.com/ricepamo/" target="_blank">
             <i class="fa-brands fa-x-twitter"></i>
-          </a>
+          </a> -->
         </footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

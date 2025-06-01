@@ -65,12 +65,19 @@
         <h2 class="sectitle">Method</h2>
         <div id="method" class="section">
           <figure>
-            <img src="img/model.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
-            <figcaption>This diagram provides an overview of Wavehax. The kernel width of the 1D convolution is set to
-              7, while the kernel size of the depthwise convolution is set to 7 × 7. The numbers of hidden channels,
-              denoted as C and C', are set to 32 and 64, respectively. The number of frequency bins, F, is set to 241,
-              calculated as half of the discrete Fourier transform points plus one. T and N represent the number of time
-              steps in the waveforms and time frames in the features, respectively.
+            <img src="generator_QHM-GAN.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
+            <figcaption>Structure of QHM-GAN generator. $k_n$ and $d_n$ are the kernel size and dilation of the corresponding convolution layer, respectively, 
+              while Tanh denotes the hyperbolic tangent function. If unlabeled, $d_n=1$ by default. Note that the configurations of all MRFs in the generator are the same.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="generator_QHARMA-GAN.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
+            <figcaption>Structure of QHARMA-GAN generator. $k_n$ is the kernel size of the corresponding convolution layer. 
+              If unlabeled, a default dilation of 1 is used. The configurations of MRFs are the same as those shown in QHM-GAN. 
+              Note that the activation functions in the output layer can be adjusted according to the type of ARMA coefficients. 
+              For instance, when both $a^l_{j,p}$ and $b^l_{j,q}$ are real-valued, activations such as leaky ReLU or Tanh can be used. 
+              For complex-valued $a^l_{j,p}$ and $b^l_{j,q}$, each parameter is predicted using two separate Conv1D layers, 
+              with Tanh and leaky ReLU used to output the phase and magnitude, respectively, which are then combined to form complex $a^l_{j,p}$ and $b^l_{j,q}$.
             </figcaption>
           </figure>
         </div>

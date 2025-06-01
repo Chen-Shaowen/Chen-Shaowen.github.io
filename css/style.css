@@ -1,0 +1,404 @@
+@import url(sanitize.css);
+@import url(ress.css);
+
+:root {
+  --background-color: #fff;
+  --line-color: #ddd;
+  --color: #3c3c3c;
+  --color2: rgba(50, 50, 50, 0.75);
+  --color3: rgba(100, 100, 100, 0.5);
+  --link-color: #1188dd;
+}
+
+:root.dark-theme {
+  --background-color: #222;
+  --line-color: #555;
+  --color: #fff;
+  --color2: rgba(250, 250, 250, 0.8);
+  --link-color: #22aaff;
+}
+
+body {
+  font-family: serif;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  letter-spacing: 0.05rem;
+  color: var(--color);
+  background-color: var(--background-color);
+}
+
+.container {
+  width: 100%;
+  max-width: 78rem;
+  margin: 0 auto;
+}
+
+.main {
+  width: 95%;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+h1 {
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+h2 {
+  font-family: sans-serif;
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+
+h3 {
+  font-family: sans-serif;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.link {
+  color: var(--color);
+  text-underline-offset: 0.15rem;
+  text-decoration: underline solid var(--color3);
+  text-decoration-thickness: 0.05rem;
+}
+
+.link:hover {
+  text-decoration: none;
+  color: var(--color3);
+}
+
+.link:visited {
+  color: var(--color);
+}
+
+.clearfix:after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+
+/*--------------------------------
+Section
+---------------------------------*/
+.sectitle {
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0 0 0.5rem 0.1em;
+  border-bottom: 0.05rem solid var(--color3);
+  font-weight: bold;
+}
+
+.section {
+  width: 97%;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+/*--------------------------------
+  Paper info
+---------------------------------*/
+.paper_info {
+  padding-top: 0.75rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.icon-container {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.icon-box {
+  width: 4.25rem;
+  height: 4.25rem;
+  border: thin solid var(--color2);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.icon-box i {
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.icon-box p {
+  margin-top: 0.05rem;
+}
+
+.icon-box a {
+  text-decoration: none;
+}
+
+/*--------------------------------
+  Citation
+---------------------------------*/
+#citation {
+  position: relative;
+  width: 90%;
+  border: 0.05rem solid var(--color2);
+  border-radius: 0.25rem;
+  margin: 2rem auto;
+}
+
+#citation p {
+  text-align: center;
+  padding: 0.5rem;
+  font-style: italic;
+}
+
+#citation i {
+  font-size: 1rem;
+}
+
+#citation .copy-button {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  color: var(--color3);
+}
+
+/*--------------------------------
+  Abstract
+---------------------------------*/
+#abstract {
+  text-align: left;
+}
+
+#abstract p {
+  padding: 0 1rem;
+}
+
+/*--------------------------------
+  Figures
+---------------------------------*/
+figure {
+  display: flex;
+  flex-flow: column;
+}
+
+figcaption {
+  font: smaller sans-serif;
+  margin: 1rem 0;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  margin: auto;
+}
+
+.images1 {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem 0 0 0;
+}
+
+.images1>figure {
+  padding-top: 1rem;
+  margin: 0 auto;
+}
+
+.images2 {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.images2>figure {
+  padding: 1rem;
+  margin: 0 auto;
+  width: 49%;
+}
+
+/*--------------------------------
+  Audio samples
+---------------------------------*/
+
+.selects {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.simple_select {
+  position: relative;
+  border: thin solid var(--color2);
+  border-radius: 0.25rem;
+}
+
+.simple_select select {
+  padding: 0.5rem 4rem 0.5rem 0.5rem;
+  width: 100%;
+  padding-right: 1em;
+  cursor: pointer;
+  text-indent: 0.1rem;
+  text-overflow: ellipsis;
+  border: none;
+  outline: none;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--color);
+}
+
+.simple_select select::-ms-expand {
+  display: none;
+}
+
+.simple_select::before {
+  position: absolute;
+  top: 1rem;
+  right: 0.75rem;
+  width: 0;
+  height: 0;
+  padding: 0;
+  content: '';
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-top: 0.6rem solid var(--color);
+  pointer-events: none;
+}
+
+.simple_select:after {
+  position: absolute;
+  top: 0;
+  right: 2.5em;
+  bottom: 0;
+  width: 0.1rem;
+  content: '';
+  border-left: thin solid var(--color2);
+}
+
+.button {
+  margin: 0.5rem 0 1rem 0;
+  text-align: center;
+}
+
+.button input {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0.75rem;
+  line-height: 0.5rem;
+  transition: .1s;
+  border: thin solid var(--color2);
+  border-radius: 0.25rem;
+}
+
+.button input:hover {
+  color: var(--color3);
+}
+
+table {
+  display: block;
+  overflow-x: scroll;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  margin: 0.25rem auto 0 auto;
+  border-collapse: separate;
+  border-spacing: 0.1rem;
+}
+
+.audio_table th {
+  border: thin solid var(--color2);
+  padding: 0.75rem;
+  background: var(--background-color);
+  color: var(--color);
+  font-weight: normal;
+  font-size: 0.85rem;
+}
+
+.audio_table td {
+  border: thin solid var(--color2);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.td_fixed {
+  position: sticky;
+  top: 0;
+  left: 0;
+  color: var(--color);
+  background: var(--background-color);
+  z-index: 1;
+}
+
+audio {
+  height: 3rem;
+}
+
+/*--------------------------------
+  References
+---------------------------------*/
+#references ul {
+  list-style-type: none;
+  padding: 0.25rem;
+  margin: 0;
+}
+
+/*--------------------------------
+ Page-top
+---------------------------------*/
+.page-top {
+  margin-top: 1rem;
+  padding: 0.35rem 0;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.page-top .material-icons-outlined {
+  vertical-align: bottom;
+  color: var(--color);
+}
+
+/*--------------------------------
+ Footer
+---------------------------------*/
+footer {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  border-top: solid;
+  border-color: var(--color);
+  border-width: 0.05rem;
+}
+
+footer .copyright {
+  font-size: 1rem;
+  color: var(--color);
+  margin-right: 0.5rem;
+}
+
+footer a i {
+  width: 1.5rem;
+  color: var(--color);
+  font-size: 1.4em;
+  margin-top: 0.125rem;
+  margin-left: 0.55rem;
+}
+
+/*--------------------------------
+ For Smartphones
+---------------------------------*/
+@media screen and (max-width: 480px) {
+  footer .icon {
+    display: none;
+  }
+}

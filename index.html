@@ -25,7 +25,7 @@
           <h1>QHARMA-GAN</h1>
           <h2>QHARMA-GAN: Quasi-Harmonic Neural Vocoder based on Autoregressive Moving Average Model</h2>
           <h3 style="margin-top: 1rem;">
-            <a class="link" href="https://https://ieeexplore.ieee.org/author/37089757663/">Shaowen Chen</a><sup>1</sup>,
+            <a class="link" href="https://ieeexplore.ieee.org/author/37089757663/">Shaowen Chen</a><sup>1</sup>,
             <a class="link" href="https://sites.google.com/site/tomokitoda/">Tomoki Toda</a><sup>1</sup>
           </h3>
           <h3 style="margin-top: 0.75rem;"><sup>1</sup>Nagoya University, Japan
@@ -94,9 +94,11 @@
             <label for="set_id">Evaluation subset</label>
             <div class="simple_select">
               <select required id="set_id" name="set_id">
-                <option value="set1" selected>I (within the training F0 range)</option>
-                <option value="set2">II (containing unseen low F0)</option>
-                <option value="set3">III (containing unseen high F0)</option>
+                <option value="set1" selected>I (Preliminary experiments in speech synthesis and $f_0$ modification)</option>
+                <option value="set2">II (Comparison in speech synthesis)</option>
+                <option value="set3">III (Comparison in speech modification)</option>
+                <option value="set3">IV (Comparison in speech modification few-shot learning)</option>
+                <option value="set3">V (Comparison in singing voice which is out of the distribution)</option>
               </select>
             </div>
 

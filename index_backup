@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <meta property='og:type' content="website">
+    <meta property='og:title' content="QHARMA-GAN Demo">
+    <meta property='og:description' content="QHARMA-GAN Demo">
+    <meta name="description" content="QHARMA-GAN Demo">
+    <title>QHARMA-GAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="css/style.css" media="all" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>数学公式示例</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>音频比较表格</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      audio {
+        width: 150px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="main">
+
+        <div class="paper_info">
+          <h1>QHARMA-GAN</h1>
+          <h2>QHARMA-GAN: Quasi-Harmonic Neural Vocoder based on Autoregressive Moving Average Model</h2>
+          <h3 style="margin-top: 1rem;">
+            <a class="link" href="https://ieeexplore.ieee.org/author/37089757663/">Shaowen Chen</a><sup>1</sup>,
+            <a class="link" href="https://sites.google.com/site/tomokitoda/">Tomoki Toda</a><sup>1</sup>
+          </h3>
+          <h3 style="margin-top: 0.75rem;"><sup>1</sup>Nagoya University, Japan
+          <h3 style="margin-top: 0.75rem;">Submitted to IEEE Transactions on Audio Speech and Language Processing
+          </h3>
+        </div>
+        
+        <p>This work is based on our previous confernece paper <a class="link" href="https://www.isca-archive.org/interspeech_2024/chen24x_interspeech.pdf">QHM-GAN</a>.</p>
+
+        <div class="icon-container">
+          <!-- <div class="icon-box">
+            <a class="link" href="https://www.isca-archive.org/interspeech_2024/chen24x_interspeech.pdf">
+              <i class="fa-regular fa-file-lines"></i>
+              <span>QHM-GAN</span>
+            </a>
+          </div> -->
+          <div class="icon-box">
+            <a class="link" href="https://arxiv.org/abs/2411.06807"><i class="fa-regular fa-file-lines"></i>
+              <p>arXiv</p>
+            </a>
+          </div>
+          <div class="icon-box">
+            <a class="link" href="https://github.com/Chen-Shaowen/QHARMA-GAN"><i class="fa-brands fa-github"></i>
+              <p>Code</p>
+            </a>
+          </div>
+        </div>
+
+        <h2 class="sectitle">Abstract</h2>
+        <div id="abstract" class="section">
+          <p>	Vocoders, encoding speech signals into acoustic features and allowing for speech signal reconstruction from them, have been studied for decades. 
+            Recently, the rise of deep learning has particularly driven the development of neural vocoders to generate high-quality speech signals. 
+            On the other hand, the existing end-to-end neural vocoders suffer from a black-box nature that blinds the speech production mechanism and the intrinsic structure of speech, 
+            resulting in the ambiguity of separately modeling source excitation and resonance characteristics and the loss of flexibly synthesizing or modifying speech with high quality. 
+            Moreover, their sequence-wise waveform generation usually requires complicated networks, leading to substantial time consumption. 
+            In this work, inspired by the quasi-harmonic model (QHM) that represents speech as sparse components, 
+            we combine the neural network and QHM synthesis process to propose a novel framework for the neural vocoder. 
+            Accordingly, speech signals can be encoded into autoregressive moving average (ARMA) functions to model the resonance characteristics, 
+            yielding accurate estimates of the amplitudes and phases of quasi-harmonics at any frequency. 
+            Subsequently, the speech can be resynthesized and arbitrarily modified in terms of pitch shifting and time stretching with high quality, 
+            whereas the time consumption and network size decrease. The experiments indicate that the proposed method leverages the strengths of QHM, the ARMA model, and neural networks, 
+            leading to the outperformance of our methods over other methods in terms of generation speed, synthesis quality, and modification flexibility.</p>
+        </div>
+
+        <h2 class="sectitle">Method (QHM-GAN and QHARMA-GAN)</h2>
+        <div id="method" class="section">
+          <figure>
+            <img src="generator_QHM-GAN.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
+            <figcaption>Structure of QHM-GAN generator. \(k_n\) and \(d_n\) are the kernel size and dilation of the corresponding convolution layer, respectively, 
+              while Tanh denotes the hyperbolic tangent function. If unlabeled, \(d_n=1\) by default. Note that the configurations of all MRFs in the generator are the same.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="generator_QHARMA-GAN.png" style="margin: 1rem auto; width: 80%;" alt="Method" title="method">
+            <figcaption>Structure of QHARMA-GAN generator. \(k_n\) is the kernel size of the corresponding convolution layer. 
+              If unlabeled, a default dilation of 1 is used. The configurations of MRFs are the same as those shown in QHM-GAN. 
+              Note that the activation functions in the output layer can be adjusted according to the type of ARMA coefficients. 
+              For instance, when both \(a^l_{j,p}\) and \(b^l_{j,q}\) are real-valued, activations such as leaky ReLU or Tanh can be used. 
+              For complex-valued \(a^l_{j,p}\) and \(b^l_{j,q}\), each parameter is predicted using two separate Conv1D layers, 
+              with Tanh and leaky ReLU used to output the phase and magnitude, respectively, which are then combined to form complex \(a^l_{j,p}\) and \(b^l_{j,q}\).
+            </figcaption>
+          </figure>
+        </div>
+
+        <h2 class="sectitle">Audio samples</h2>
+        <div id="samples" class="section">
+
+          <p>Models in main experiments are trained by JVS corpus [1] and VCTK corpus [2]. 
+            The few-shot learning is based on a small version of LJspeech corpus [3]. The generalization ability is built on the Opensinger [4].
+          </p>
+
+          <p>The candidate models are: <br>
+              Conventional models:
+            <p>   1. WORLD [5]</p>
+            <p>   2. QHM [6]</p><br>
+
+          Neural models:
+            <p>   1. HiFi-GAN [7]</p>
+            <p>   2. Vocos [8]</p>
+            <p>   3. QHM-GAN [9]</p>
+            <p>   4. QHARMA-GAN</p>
+            <p>   5. QHARMA-GAN-small</p><br>
+            We first conduct a preliminary experiment in Table I to select the best neural models from baselines (HiFi-GAN and Vocos) 
+            and our proposed methods (QHM-GAN and QHARMA-GAN) to further do the more in-depth comparison.
+          </p>
+
+          <div class="selects" style="margin: 1.2rem auto;">
+            <label for="set_id">Evaluation subset</label>
+            <div class="simple_select">
+              <select required id="set_id" name="set_id">
+                <option value="set1" selected>I (Preliminary experiment in speech synthesis and \(f_0\) modification)</option>
+                <option value="set2">II (Comparison in speech synthesis)</option>
+                <option value="set3">III (Comparison in speech modification)</option>
+                <option value="set4">IV (Comparison in speech modification few-shot learning)</option>
+                <option value="set5">V (Comparison in singing voice which is out of the distribution)</option>
+              </select>
+            </div>
+
+            <div class=" button">
+              <input type="button" value="Apply" onclick="renderTable()">
+            </div>
+          </div>
+
+
+
+
+
+
+          <div id="audio-table-container"></div>
+
+          <!-- JavaScript -->
+          <!-- <script>
+            const sets = {
+              set1: {
+                utt_names: ["jvs010_093", "p271_047"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHM-GAN": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              },
+              set2: {
+                utt_names: ["jvs001_091", "jvs003_092", "p226_364", "p259_472"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set3: {
+                utt_names: ["jvs008_091", "p318_418"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 4,
+                  "QHM": 4,
+                  "QHARMA-GAN": 4,
+                  "QHARMA-GAN-small": 4
+                },
+                versionCount: 4
+              },
+              set4: {
+                utt_names: ["LJ005-0121", "LJ005-0282"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set5: {
+                utt_names: ["斑马，斑马(Mandarin, male)", "残酷月光(Mandarin, male)", "千千阙歌(Cantonese, female)", "我们的爱(Mandarin female)"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              }
+            };
+
+            const scaleLabels = {
+              1: [""],
+              4: ["2^-1", "2^-0.5", "2^0.5", "2^1"],
+              5: ["2^-1", "2^-0.5", "2^0", "2^0.5", "2^1"]
+            };
+
+            function renderTable() {
+              const setId = document.getElementById("set_id").value;
+              const { utt_names, methodVersions, versionCount } = sets[setId];
+              const methods = Object.keys(methodVersions);
+              const scales = scaleLabels[versionCount];
+
+              const container = document.getElementById("audio-table-container");
+              container.innerHTML = "";
+              const table = document.createElement("table");
+
+              const thead = document.createElement("thead");
+              const headerRow = document.createElement("tr");
+              ["samples"].concat(versionCount > 1 ? ["Scale"] : []).concat(methods).forEach(text => {
+                const th = document.createElement("th");
+                th.innerText = text;
+                headerRow.appendChild(th);
+              });
+              thead.appendChild(headerRow);
+              table.appendChild(thead);
+
+              const tbody = document.createElement("tbody");
+
+              for (const utt of utt_names) {
+                for (let i = 0; i < versionCount; i++) {
+                  const tr = document.createElement("tr");
+
+                  if (i === 0) {
+                    const tdUtt = document.createElement("td");
+                    tdUtt.innerText = utt;
+                    tdUtt.rowSpan = versionCount;
+                    tr.appendChild(tdUtt);
+                  }
+
+                  if (versionCount > 1) {
+                    const tdScale = document.createElement("td");
+                    tdScale.innerText = scales[i] || "";
+                    tr.appendChild(tdScale);
+                  }
+
+                  for (const method of methods) {
+                    // set3 中 Ground Truth 合并单元格只出现一次
+                    if (setId === "set3" && method === "Ground Truth") {
+                      if (i === 0) {
+                        const td = document.createElement("td");
+                        td.rowSpan = versionCount;
+                        const audio = document.createElement("audio");
+                        audio.controls = true;
+                        audio.src = `samples/${method}/${utt}.wav`;
+                        td.appendChild(audio);
+                        tr.appendChild(td);
+                      }
+                      continue; // 其余行不再生成 td
+                    }
+
+                    const td = document.createElement("td");
+                    const count = methodVersions[method];
+
+                    if (count === 1 && (versionCount === 1 || (versionCount === 5 && i === 2))) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = `samples/${method}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    if (count > 1 && i < count) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = `samples/${method}_v${i + 1}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    tr.appendChild(td);
+                  }
+
+                  tbody.appendChild(tr);
+                }
+              }
+
+              table.appendChild(tbody);
+              container.appendChild(table);
+            }
+
+            renderTable();
+          </script> -->
+          <script>
+            const sets = {
+              set1: {
+                utt_names: ["jvs010_093", "p271_047"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHM-GAN": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              },
+              set2: {
+                utt_names: ["jvs001_091", "jvs003_092", "p226_364", "p259_472"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set3: {
+                utt_names: ["jvs008_091", "p318_418"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 4,
+                  "QHM": 4,
+                  "QHARMA-GAN": 4,
+                  "QHARMA-GAN-small": 4
+                },
+                versionCount: 4
+              },
+              set4: {
+                utt_names: ["LJ005-0121", "LJ005-0282"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "WORLD": 1,
+                  "QHM": 1,
+                  "HiFi-GAN": 1,
+                  "QHARMA-GAN": 1,
+                  "QHARMA-GAN-small": 1
+                },
+                versionCount: 1
+              },
+              set5: {
+                utt_names: ["斑马，斑马(Mandarin, male)", "残酷月光(Mandarin, male)", "千千阙歌(Cantonese, female)", "我们的爱(Mandarin female)"],
+                methodVersions: {
+                  "Ground Truth": 1,
+                  "HiFi-GAN": 1,
+                  "Vocos": 5,
+                  "QHARMA-GAN": 5
+                },
+                versionCount: 5
+              }
+            };
+            
+            const audioPathMap = {
+              set1: {
+                "jvs010_093": {
+                  "Ground Truth": [
+                    "samples/1/GT/jvs010_VOICEACTRESS100_093.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/1/HIFIGAN/jvs010_VOICEACTRESS100_093_gen.wav"
+                  ],
+                  "Vocos": [
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ],
+                  "QHM-GAN": [
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/QHARMA-GAN/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ]
+                },
+                "p271_047": {
+                  "Ground Truth": [
+                    "samples/1/GT/p271_047.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/1/HIFIGAN/p271_047_gen.wav"
+                  ],
+                  "Vocos": [
+                    "samples/1/VOCOS/p271_047_gen_p-1.wav",
+                    "samples/1/VOCOS/p271_047_gen_p-0.5.wav",
+                    "samples/1/VOCOS/p271_047_gen.wav",
+                    "samples/1/VOCOS/p271_047_gen_p0.5.wav",
+                    "samples/1/VOCOS/p271_047_gen_p1.wav"
+                  ],
+                  "QHM-GAN": [
+                    "samples/1/QHM-GAN/p271_047_gen_p-1.wav",
+                    "samples/1/QHM-GAN/p271_047_gen_p-0.5.wav",
+                    "samples/1/QHM-GAN/p271_047_gen.wav",
+                    "samples/1/QHM-GAN/p271_047_gen_p0.5.wav",
+                    "samples/1/QHM-GAN/p271_047_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/1/QHARMA-GAN/p271_047_gen_p-1.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen_p-0.5.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen_p0.5.wav",
+                    "samples/1/QHARMA-GAN/p271_047_gen_p1.wav"
+                  ]
+                }
+              },
+              set2: {
+                "jvs001_091": {
+                  "Ground Truth": [
+                    "samples/2/GT/jvs001_VOICEACTRESS100_091.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/jvs001_VOICEACTRESS100_091_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/jvs001_VOICEACTRESS100_091_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/jvs001_VOICEACTRESS100_091_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/jvs001_VOICEACTRESS100_091_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/jvs001_VOICEACTRESS100_091_gen.wav"
+                  ]
+                },
+                "jvs003_092": {
+                  "Ground Truth": [
+                    "samples/2/GT/jvs003_VOICEACTRESS100_092.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/jvs003_VOICEACTRESS100_092_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/jvs003_VOICEACTRESS100_092_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/jvs003_VOICEACTRESS100_092_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/jvs003_VOICEACTRESS100_092_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/jvs003_VOICEACTRESS100_092_gen.wav"
+                  ]
+                },
+                "p226_364": {
+                  "Ground Truth": [
+                    "samples/2/GT/p226_364.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/p226_364_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/p226_364_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/p226_364_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/p226_364_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/p226_364_gen.wav"
+                  ]
+                },
+                "p259_472": {
+                  "Ground Truth": [
+                    "samples/2/GT/p259_472.wav"
+                  ],
+                  "WORLD": [
+                    "samples/2/WORLD/p259_472_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/2/QHM/p259_472_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/2/HIFIGAN/p259_472_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/2/QHARMA-GAN/p259_472_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/2/QHARMA-GAN/p259_472_gen.wav"
+                  ]
+                }
+              },
+              set3: {
+                "jvs008_091": {
+                  "Ground Truth": [
+                    "samples/3/GT/jvs008_VOICEACTRESS100_091.wav"
+                  ],
+                  "WORLD": [
+                    "samples/3/WORLD/-1/jvs008_VOICEACTRESS100_091_f0.50.wav",
+                    "samples/3/WORLD/-0.5/jvs008_VOICEACTRESS100_091_f0.71.wav",
+                    "samples/3/WORLD/0.5/jvs008_VOICEACTRESS100_091_f1.41.wav",
+                    "samples/3/WORLD/1/jvs008_VOICEACTRESS100_091_f2.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/3/QHM/-1/jvs008_VOICEACTRESS100_091_QHM_p-1.wav",
+                    "samples/3/QHM/-0.5/jvs008_VOICEACTRESS100_091_QHM_p-0.5.wav",
+                    "samples/3/QHM/0.5/jvs008_VOICEACTRESS100_091_QHM_p0.5.wav",
+                    "samples/3/QHM/1/jvs008_VOICEACTRESS100_091_QHM_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/3/QHARMA-GAN/-1/jvs008_VOICEACTRESS100_091_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN/-0.5/jvs008_VOICEACTRESS100_091_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN/0.5/jvs008_VOICEACTRESS100_091_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN/1/jvs008_VOICEACTRESS100_091_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/3/QHARMA-GAN-small/-1/jvs008_VOICEACTRESS100_091_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN-small/-0.5/jvs008_VOICEACTRESS100_091_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN-small/0.5/jvs008_VOICEACTRESS100_091_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN-small/1/jvs008_VOICEACTRESS100_091_gen_p1.wav"
+                  ]
+                },
+                "p318_418": {
+                  "Ground Truth": [
+                    "samples/3/GT/p318_418.wav"
+                  ],
+                  "WORLD": [
+                    "samples/3/WORLD/-1/p318_418_f0.50.wav",
+                    "samples/3/WORLD/-0.5/p318_418_f0.71.wav",
+                    "samples/3/WORLD/0.5/p318_418_f1.41.wav",
+                    "samples/3/WORLD/1/p318_418_f2.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/3/QHM/-1/p318_418_QHM_p-1.wav",
+                    "samples/3/QHM/-0.5/p318_418_QHM_p-0.5.wav",
+                    "samples/3/QHM/0.5/p318_418_QHM_p0.5.wav",
+                    "samples/3/QHM/1/p318_418_QHM_p1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/3/QHARMA-GAN/-1/p318_418_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN/-0.5/p318_418_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN/0.5/p318_418_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN/1/p318_418_gen_p1.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/3/QHARMA-GAN-small/-1/p318_418_gen_p-1.wav",
+                    "samples/3/QHARMA-GAN-small/-0.5/p318_418_gen_p-0.5.wav",
+                    "samples/3/QHARMA-GAN-small/0.5/p318_418_gen_p0.5.wav",
+                    "samples/3/QHARMA-GAN-small/1/p318_418_gen_p1.wav"
+                  ]
+                }
+              },
+              set4: {
+                "LJ005-0121": {
+                  "Ground Truth": [
+                    "samples/4/GT/LJ005-0121.wav"
+                  ],
+                  "WORLD": [
+                    "samples/4/WORLD/LJ005-0121_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/4/QHM/LJ005-0121_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/4/HIFIGAN/LJ005-0121_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/4/QHARMA-GAN/LJ005-0121_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/4/QHARMA-GAN/LJ005-0121_gen.wav"
+                  ]
+                },
+                "LJ005-0282": {
+                  "Ground Truth": [
+                    "samples/4/GT/LJ005-0282.wav"
+                  ],
+                  "WORLD": [
+                    "samples/4/WORLD/LJ005-0282_f1.00.wav"
+                  ],
+                  "QHM": [
+                    "samples/4/QHM/LJ005-0282_QHM.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/4/HIFIGAN/LJ005-0282_gen.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/4/QHARMA-GAN/LJ005-0282_gen.wav"
+                  ],
+                  "QHARMA-GAN-small": [
+                    "samples/4/QHARMA-GAN/LJ005-0282_gen.wav"
+                  ]
+                }
+              },
+              set5: {
+                "斑马，斑马(Mandarin, male)": {
+                  "Ground Truth": [
+                    "samples/5/GT/斑马，斑马.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/斑马，斑马.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/斑马，斑马_-1.wav",
+                    "samples/5/VOCOS/斑马，斑马_-0.5.wav",
+                    "samples/5/VOCOS/斑马，斑马.wav",
+                    "samples/5/VOCOS/斑马，斑马_0.5.wav",
+                    "samples/5/VOCOS/斑马，斑马_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/斑马，斑马_-1.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马_-0.5.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马_0.5.wav",
+                    "samples/5/QHARMA-GAN/斑马，斑马_1.wav"
+                  ]
+                },
+                "残酷月光(Mandarin, male)": {
+                  "Ground Truth": [
+                    "samples/5/GT/残酷月光.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/残酷月光.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/残酷月光_-1.wav",
+                    "samples/5/VOCOS/残酷月光_-0.5.wav",
+                    "samples/5/VOCOS/残酷月光.wav",
+                    "samples/5/VOCOS/残酷月光_0.5.wav",
+                    "samples/5/VOCOS/残酷月光_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/残酷月光_-1.wav",
+                    "samples/5/QHARMA-GAN/残酷月光_-0.5.wav",
+                    "samples/5/QHARMA-GAN/残酷月光.wav",
+                    "samples/5/QHARMA-GAN/残酷月光_0.5.wav",
+                    "samples/5/QHARMA-GAN/残酷月光_1.wav"
+                  ]
+                },
+                "千千阙歌(Cantonese, female)": {
+                  "Ground Truth": [
+                    "samples/5/GT/千千阙歌.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/千千阙歌.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/千千阙歌_-1.wav",
+                    "samples/5/VOCOS/千千阙歌_-0.5.wav",
+                    "samples/5/VOCOS/千千阙歌.wav",
+                    "samples/5/VOCOS/千千阙歌_0.5.wav",
+                    "samples/5/VOCOS/千千阙歌_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/千千阙歌_-1.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌_-0.5.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌_0.5.wav",
+                    "samples/5/QHARMA-GAN/千千阙歌_1.wav"
+                  ]
+                },
+                "我们的爱(Mandarin female)": {
+                  "Ground Truth": [
+                    "samples/5/GT/我们的爱.wav"
+                  ],
+                  "HiFi-GAN": [
+                    "samples/5/HIFIGAN/我们的爱.wav"
+                  ],
+                  "Vocos": [
+                    "samples/5/VOCOS/我们的爱_-1.wav",
+                    "samples/5/VOCOS/我们的爱_-0.5.wav",
+                    "samples/5/VOCOS/我们的爱.wav",
+                    "samples/5/VOCOS/我们的爱_0.5.wav",
+                    "samples/5/VOCOS/我们的爱_1.wav"
+                  ],
+                  "QHARMA-GAN": [
+                    "samples/5/QHARMA-GAN/我们的爱_-1.wav",
+                    "samples/5/QHARMA-GAN/我们的爱_-0.5.wav",
+                    "samples/5/QHARMA-GAN/我们的爱.wav",
+                    "samples/5/QHARMA-GAN/我们的爱_0.5.wav",
+                    "samples/5/QHARMA-GAN/我们的爱_1.wav"
+                  ]
+                }
+              }
+            };
+
+            const scaleLabels = {
+              1: [""],
+              4: ["2^-1", "2^-0.5", "2^0.5", "2^1"],
+              5: ["2^-1", "2^-0.5", "2^0", "2^0.5", "2^1"]
+            };
+
+            function renderTable() {
+              const setId = document.getElementById("set_id").value;
+              const { utt_names, methodVersions, versionCount } = sets[setId];
+              const methods = Object.keys(methodVersions);
+              const scales = scaleLabels[versionCount];
+
+              const container = document.getElementById("audio-table-container");
+              container.innerHTML = "";
+              const table = document.createElement("table");
+
+              const thead = document.createElement("thead");
+              const headerRow = document.createElement("tr");
+              ["samples"].concat(versionCount > 1 ? ["Scale"] : []).concat(methods).forEach(text => {
+                const th = document.createElement("th");
+                th.innerText = text;
+                headerRow.appendChild(th);
+              });
+              thead.appendChild(headerRow);
+              table.appendChild(thead);
+
+              const tbody = document.createElement("tbody");
+
+              for (const utt of utt_names) {
+                for (let i = 0; i < versionCount; i++) {
+                  const tr = document.createElement("tr");
+
+                  if (i === 0) {
+                    const tdUtt = document.createElement("td");
+                    tdUtt.innerText = utt;
+                    tdUtt.rowSpan = versionCount;
+                    tr.appendChild(tdUtt);
+                  }
+
+                  if (versionCount > 1) {
+                    const tdScale = document.createElement("td");
+                    tdScale.innerText = scales[i] || "";
+                    tr.appendChild(tdScale);
+                  }
+
+                  for (const method of methods) {
+                    // set3 中 Ground Truth 合并单元格只出现一次
+                    if (setId === "set3" && method === "Ground Truth") {
+                      if (i === 0) {
+                        const td = document.createElement("td");
+                        td.rowSpan = versionCount;
+                        const audio = document.createElement("audio");
+                        audio.controls = true;
+                        audio.src = (audioPathMap?.[setId]?.[utt]?.[method]?.[0]) || `samples/${method}/${utt}.wav`;
+                        td.appendChild(audio);
+                        tr.appendChild(td);
+                      }
+                      continue; // 其余行不再生成 td
+                    }
+
+                    const td = document.createElement("td");
+                    const count = methodVersions[method];
+
+                    if (count === 1 && (versionCount === 1 || (versionCount === 5 && i === 2))) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = (audioPathMap?.[setId]?.[utt]?.[method]?.[0]) || `samples/${method}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    if (count > 1 && i < count) {
+                      const audio = document.createElement("audio");
+                      audio.controls = true;
+                      audio.src = (audioPathMap?.[setId]?.[utt]?.[method]?.[i]) || `samples/${method}_v${i + 1}/${utt}.wav`;
+                      td.appendChild(audio);
+                    }
+
+                    tr.appendChild(td);
+                  }
+
+                  tbody.appendChild(tr);
+                }
+              }
+
+              table.appendChild(tbody);
+              container.appendChild(table);
+            }
+
+            renderTable();
+          </script>
+
+          
+
+
+
+
+
+          
+        </div>
+
+        <h2 class="sectitle">Citation</h2>
+        <div id="citation" class="section">
+          <button class="copy-button" onclick="copyToClipboard('citation_text')"><i
+              class="fa-solid fa-quote-left"></i></button>
+          <p id="citation_text">Submitting</p>
+        </div>
+
+        <h2 class="sectitle">References</h2>
+        <div id="references" class="section">
+          <ul>
+            <li>[1] S. Takamichi, K. Mitsui, Y. Saito, T. Koriyama, N. Tanji, and
+                    H. Saruwatari, “JVS corpus: free Japanese multi-speaker voice corpus,”
+                    arXiv preprint arXiv:1908.06248, 2019.</li>
+            <li>[2] J. Yamagishi, C. Veaux, K. MacDonald et al., “CSTR VCTK Corpus:
+                    English multi-speaker corpus for CSTR voice cloning toolkit (version
+                    0.92),” University of Edinburgh. The Centre for Speech Technology
+                    Research (CSTR), pp. 271-350, 2019.</li>
+            <li>[3] K. Ito and L. Johnson, “The LJ Speech dataset,” https://keithito.com/
+                    LJ-Speech-Dataset/, 2017.</li>
+            <li>[4] Huang, R., Chen, F., Ren, Y., Liu, J., Cui, C., and Zhao, Z. Multi-singer: Fast multi-singer 
+                    singing voice vocoder with a large-scale corpus. In Proceedings of the 29th ACM International Conference 
+                    on Multimedia, pp. 3945-3954, 2021.</li>
+            <li>[5] M.Morise, F. Yokomori, and K. Ozawa, “World: a vocoder-based high-quality speech synthesis system for real-time applications,” 
+                    IEICE TRANSACTIONS on Information and Systems, vol. 99, no. 7, pp. 1877-1884, 2016.</li>
+            <li>[6] Y. Pantazis, O. Rosec, and Y. Stylianou, “On the properties of a time
+                    varying quasi-harmonic model of speech,” in Proc. Interspeech, 2008.</li>
+            <li>[7] J. Kong, J. Kim, and J. Bae, “HiFi-GAN: Generative adversarial
+                    networks for efficient and high fidelity speech synthesis,” Advances
+                    in Neural Information Processing Systems, vol. 33, pp. 17022-17033,2020.</li>
+            <li>[8] H. Siuzdak, Vocos: Closing the gap between time-domain and Fourierbased neural vocoders for
+                    high-quality audio synthesis, in Proc. ICLR, 2024.</li>
+            <li>[9] S. Chen and T. Toda, “QHM-GAN: Neural vocoder based on quasi
+                    harmonic modeling,” in Proc. Interspeech, 2024, pp. 3889–3893.</li>
+          </ul>
+        </div>
+
+
+        <div class="page-top" id="js-page-top">
+          <span class="material-icons-outlined">expand_less</span>
+        </div>
+
+        <footer>
+          <a class="copyright">&copy; 2025 Shaowen Chen</a>
+          <!-- <a href="https://ieeexplore.ieee.org/author/37089757663/" target="_blank">
+            <i class="fa-brands fa-github"></i>
+          </a> -->
+          <!-- <a href="https://scholar.google.com/citations?hl=en&user=ihKGblgAAAAJ" target="_blank">
+            <i class="fa-brands fa-google-scholar"></i>
+          </a> -->
+          <!-- <a href="https://twitter.com/ricepamo/" target="_blank">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a> -->
+        </footer>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type='text/javascript' src="js/script.js"></script>
+  </body>
+
+</html>

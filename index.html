@@ -125,9 +125,10 @@
           Neural models:
             <p>   1. HiFi-GAN [7]</p>
             <p>   2. Vocos [8]</p>
-            <p>   3. QHM-GAN [9]</p>
-            <p>   4. QHARMA-GAN</p>
-            <p>   5. QHARMA-GAN-small</p><br>
+            <p>   3. NSFHiFi-GAN [9]</p>
+            <p>   4. QHM-GAN [10]</p>
+            <p>   5. QHARMA-GAN</p>
+            <p>   6. QHARMA-GAN-small</p><br>
             We first conduct a preliminary experiment in Table I to select the best neural models from baselines (HiFi-GAN and Vocos) 
             and our proposed methods (QHM-GAN and QHARMA-GAN) to further do the more in-depth comparison.
           </p>
@@ -206,7 +207,7 @@
                 versionCount: 1
               },
               set5: {
-                utt_names: ["斑马，斑马(Mandarin, male)", "残酷月光(Mandarin, male)", "千千阙歌(Cantonese, female)", "我们的爱(Mandarin female)"],
+                utt_names: ["斑马，斑马(Chinese, male)", "残酷月光(Chinese, male)", "千千阙歌(Chinese, female)", "我们的爱(Cantonese female)"],
                 methodVersions: {
                   "Ground Truth": 1,
                   "HiFi-GAN": 1,
@@ -315,6 +316,7 @@
                   "Ground Truth": 1,
                   "HiFi-GAN": 1,
                   "Vocos": 5,
+                  "NSFHiFi-GAN": 5,
                   "QHM-GAN": 5,
                   "QHARMA-GAN": 5
                 },
@@ -356,11 +358,12 @@
                 versionCount: 1
               },
               set5: {
-                utt_names: ["斑马，斑马(Mandarin, male)", "残酷月光(Mandarin, male)", "千千阙歌(Cantonese, female)", "我们的爱(Mandarin female)"],
+                utt_names: ["斑马，斑马(Chinese, male)", "残酷月光(Chinese, male)", "千千阙歌(Cantonese, female)", "我们的爱(Chinese, female)"],
                 methodVersions: {
                   "Ground Truth": 1,
                   "HiFi-GAN": 1,
                   "Vocos": 5,
+                  "NSFHiFi-GAN": 5,
                   "QHARMA-GAN": 5
                 },
                 versionCount: 5
@@ -382,6 +385,13 @@
                     "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen.wav",
                     "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
                     "samples/1/VOCOS/jvs010_VOICEACTRESS100_093_gen_p1.wav"
+                  ],
+                  "NSFHiFi-GAN": [
+                    "samples/1/NSFHIFIGAN/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
+                    "samples/1/NSFHIFIGAN/jvs010_VOICEACTRESS100_093_gen_p-0.5.wav",
+                    "samples/1/NSFHIFIGAN/jvs010_VOICEACTRESS100_093_gen.wav",
+                    "samples/1/NSFHIFIGAN/jvs010_VOICEACTRESS100_093_gen_p0.5.wav",
+                    "samples/1/NSFHIFIGAN/jvs010_VOICEACTRESS100_093_gen_p1.wav"
                   ],
                   "QHM-GAN": [
                     "samples/1/QHM-GAN/jvs010_VOICEACTRESS100_093_gen_p-1.wav",
@@ -411,6 +421,13 @@
                     "samples/1/VOCOS/p271_047_gen.wav",
                     "samples/1/VOCOS/p271_047_gen_p0.5.wav",
                     "samples/1/VOCOS/p271_047_gen_p1.wav"
+                  ],
+                  "NSFHiFi-GAN": [
+                    "samples/1/NSFHIFIGAN/p271_047_gen_p-1.wav",
+                    "samples/1/NSFHIFIGAN/p271_047_gen_p-0.5.wav",
+                    "samples/1/NSFHIFIGAN/p271_047_gen.wav",
+                    "samples/1/NSFHIFIGAN/p271_047_gen_p0.5.wav",
+                    "samples/1/NSFHIFIGAN/p271_047_gen_p1.wav"
                   ],
                   "QHM-GAN": [
                     "samples/1/QHM-GAN/p271_047_gen_p-1.wav",
@@ -613,7 +630,7 @@
                 }
               },
               set5: {
-                "斑马，斑马(Mandarin, male)": {
+                "斑马，斑马(Chinese, male)": {
                   "Ground Truth": [
                     "samples/5/GT/斑马，斑马.wav"
                   ],
@@ -627,6 +644,13 @@
                     "samples/5/VOCOS/斑马，斑马_0.5.wav",
                     "samples/5/VOCOS/斑马，斑马_1.wav"
                   ],
+                  "NSFHiFi-GAN": [
+                    "samples/5/NSFHIFIGAN/斑马，斑马_-1.wav",
+                    "samples/5/NSFHIFIGAN/斑马，斑马_-0.5.wav",
+                    "samples/5/NSFHIFIGAN/斑马，斑马.wav",
+                    "samples/5/NSFHIFIGAN/斑马，斑马_0.5.wav",
+                    "samples/5/NSFHIFIGAN/斑马，斑马_1.wav"
+                  ],
                   "QHARMA-GAN": [
                     "samples/5/QHARMA-GAN/斑马，斑马_-1.wav",
                     "samples/5/QHARMA-GAN/斑马，斑马_-0.5.wav",
@@ -635,7 +659,7 @@
                     "samples/5/QHARMA-GAN/斑马，斑马_1.wav"
                   ]
                 },
-                "残酷月光(Mandarin, male)": {
+                "残酷月光(Chinese, male)": {
                   "Ground Truth": [
                     "samples/5/GT/残酷月光.wav"
                   ],
@@ -648,6 +672,13 @@
                     "samples/5/VOCOS/残酷月光.wav",
                     "samples/5/VOCOS/残酷月光_0.5.wav",
                     "samples/5/VOCOS/残酷月光_1.wav"
+                  ],
+                  "NSFHiFi-GAN": [
+                    "samples/5/NSFHIFIGAN/残酷月光_-1.wav",
+                    "samples/5/NSFHIFIGAN/残酷月光_-0.5.wav",
+                    "samples/5/NSFHIFIGAN/残酷月光.wav",
+                    "samples/5/NSFHIFIGAN/残酷月光_0.5.wav",
+                    "samples/5/NSFHIFIGAN/残酷月光_1.wav"
                   ],
                   "QHARMA-GAN": [
                     "samples/5/QHARMA-GAN/残酷月光_-1.wav",
@@ -671,6 +702,13 @@
                     "samples/5/VOCOS/千千阙歌_0.5.wav",
                     "samples/5/VOCOS/千千阙歌_1.wav"
                   ],
+                  "NSFHiFi-GAN": [
+                    "samples/5/NSFHIFIGAN/千千阙歌_-1.wav",
+                    "samples/5/NSFHIFIGAN/千千阙歌_-0.5.wav",
+                    "samples/5/NSFHIFIGAN/千千阙歌.wav",
+                    "samples/5/NSFHIFIGAN/千千阙歌_0.5.wav",
+                    "samples/5/NSFHIFIGAN/千千阙歌_1.wav"
+                  ],
                   "QHARMA-GAN": [
                     "samples/5/QHARMA-GAN/千千阙歌_-1.wav",
                     "samples/5/QHARMA-GAN/千千阙歌_-0.5.wav",
@@ -679,7 +717,7 @@
                     "samples/5/QHARMA-GAN/千千阙歌_1.wav"
                   ]
                 },
-                "我们的爱(Mandarin female)": {
+                "我们的爱(Chinese, female)": {
                   "Ground Truth": [
                     "samples/5/GT/我们的爱.wav"
                   ],
@@ -692,6 +730,13 @@
                     "samples/5/VOCOS/我们的爱.wav",
                     "samples/5/VOCOS/我们的爱_0.5.wav",
                     "samples/5/VOCOS/我们的爱_1.wav"
+                  ],
+                  "NSFHiFi-GAN": [
+                    "samples/5/NSFHIFIGAN/我们的爱_-1.wav",
+                    "samples/5/NSFHIFIGAN/我们的爱_-0.5.wav",
+                    "samples/5/NSFHIFIGAN/我们的爱.wav",
+                    "samples/5/NSFHIFIGAN/我们的爱_0.5.wav",
+                    "samples/5/NSFHIFIGAN/我们的爱_1.wav"
                   ],
                   "QHARMA-GAN": [
                     "samples/5/QHARMA-GAN/我们的爱_-1.wav",
@@ -835,7 +880,9 @@
                     in Neural Information Processing Systems, vol. 33, pp. 17022-17033,2020.</li>
             <li>[8] H. Siuzdak, Vocos: Closing the gap between time-domain and Fourierbased neural vocoders for
                     high-quality audio synthesis, in Proc. ICLR, 2024.</li>
-            <li>[9] S. Chen and T. Toda, “QHM-GAN: Neural vocoder based on quasi
+            <li>[9] Wang X, Takaki S, Yamagishi J. Neural source-filter waveform models for statistical parametric speech synthesis[J]. 
+                    IEEE/ACM Transactions on Audio, Speech, and Language Processing, 2019, 28: 402-415.</li>
+            <li>[10] S. Chen and T. Toda, “QHM-GAN: Neural vocoder based on quasi
                     harmonic modeling,” in Proc. Interspeech, 2024, pp. 3889–3893.</li>
           </ul>
         </div>
@@ -847,15 +894,6 @@
 
         <footer>
           <a class="copyright">&copy; 2025 Shaowen Chen</a>
-          <!-- <a href="https://ieeexplore.ieee.org/author/37089757663/" target="_blank">
-            <i class="fa-brands fa-github"></i>
-          </a> -->
-          <!-- <a href="https://scholar.google.com/citations?hl=en&user=ihKGblgAAAAJ" target="_blank">
-            <i class="fa-brands fa-google-scholar"></i>
-          </a> -->
-          <!-- <a href="https://twitter.com/ricepamo/" target="_blank">
-            <i class="fa-brands fa-x-twitter"></i>
-          </a> -->
         </footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
